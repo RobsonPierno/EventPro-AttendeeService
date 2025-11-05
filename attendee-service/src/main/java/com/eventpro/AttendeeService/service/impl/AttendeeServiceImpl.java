@@ -57,8 +57,8 @@ public class AttendeeServiceImpl implements AttendeeService {
 			LocalDate limitDate = LocalDate.now().minusYears(18);
 			
 			List<Attendee> attendees = overEighteen 
-					? this.repository.findAllByBirthDateAfter(limitDate) 
-					: this.repository.findAllByBirthDateBefore(limitDate);
+					? this.repository.findAllByBirthDateBefore(limitDate.plusDays(1)) 
+					: this.repository.findAllByBirthDateAfter(limitDate);
 			
 			dtos = attendees.stream().map(fromEntityToDto).toList();
 			return dtos;

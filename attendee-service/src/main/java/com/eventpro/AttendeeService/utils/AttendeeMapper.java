@@ -5,7 +5,7 @@ import org.mapstruct.Mapper;
 import com.eventpro.AttendeeService.dto.AttendeeDTO;
 import com.eventpro.AttendeeService.model.Attendee;
 
-@Mapper(componentModel = "string")
+@Mapper(componentModel = "spring")
 public interface AttendeeMapper {
 
 	Attendee toEntity(AttendeeDTO dto);
