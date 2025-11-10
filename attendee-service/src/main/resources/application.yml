@@ -8,6 +8,11 @@ spring:
   application:
     name: AttendeeService
 
+  kafka:
+    bootstrap-servers: kafka:9092
+    consumer:
+      group-id: attendee-group
+
   datasource:
     url: jdbc:postgresql://host.docker.internal:5432/postgres
     username: ${DB_USERNAME}
@@ -33,7 +38,10 @@ spring:
           type:
             trace: true
 
-logging:
-  level:
-    root: DEBUG
-    org.hibernate.SQL: DEBUG
+kafka:
+  topic:
+    payment: 
+      success: payment.success 
+    ticket:
+      sale:
+        done: ticket.sale.done

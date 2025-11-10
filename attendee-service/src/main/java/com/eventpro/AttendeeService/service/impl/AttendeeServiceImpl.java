@@ -9,8 +9,10 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.eventpr.SalesService.dto.SaleDTO;
 import com.eventpro.AttendeeService.dto.AttendeeDTO;
 import com.eventpro.AttendeeService.model.Attendee;
+import com.eventpro.AttendeeService.producer.KafkaProducer;
 import com.eventpro.AttendeeService.repository.AttendeeRepository;
 import com.eventpro.AttendeeService.service.AttendeeService;
 import com.eventpro.AttendeeService.utils.AttendeeMapper;
@@ -25,10 +27,13 @@ public class AttendeeServiceImpl implements AttendeeService {
 	
 	@Autowired
 	private AttendeeMapper mapper;
+	
+	@Autowired
+	private KafkaProducer kafkaProducer;
 
 	@Override
 	public void create(final AttendeeDTO dto) {
-		log.debug("create({})", dto);
+		log.info("create({})", dto);
 		
 		Attendee at = this.mapper.toEntity(dto);
 		
@@ -37,7 +42,7 @@ public class AttendeeServiceImpl implements AttendeeService {
 
 	@Override
 	public AttendeeDTO findById(final Integer id) {
-		log.debug("findById({})", id);
+		log.info("findById({})", id);
 		
 		AttendeeDTO dto = this.repository.findById(id)
 											.map(e -> this.mapper.toDTO(e))
@@ -48,7 +53,7 @@ public class AttendeeServiceImpl implements AttendeeService {
 
 	@Override
 	public List<AttendeeDTO> findAll(final Boolean overEighteen) {
-		log.debug("findAll({})", overEighteen);
+		log.info("findAll({})", overEighteen);
 		
 		List<AttendeeDTO> dtos;
 		Function<Attendee, AttendeeDTO> fromEntityToDto = e -> this.mapper.toDTO(e);
@@ -66,6 +71,17 @@ public class AttendeeServiceImpl implements AttendeeService {
 		
 		dtos = this.repository.findAll().stream().map(fromEntityToDto).toList();
 		return dtos;
+	}
+
+	@Override
+	public void notify(SaleDTO saleDto) {
+		log.info("notify({})", saleDto);
+		
+		Attendee att = this.repository.findById(saleDto.attendeeId()).orElseThrow(RuntimeException::new);
+		
+		log.info("Notification sent to {}, email {}!", att.getName(), att.getEmail());
+		
+		this.kafkaProducer.ticketSaleDone(saleDto);
 	}
 
 }
