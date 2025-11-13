@@ -37,7 +37,11 @@ public class AttendeeController implements AttendeeClient {
 
 	@Override
 	public void checkin(CheckInDTO checkin) {
-		this.service.checkin(checkin);
+		this.service.checkin(checkin).thenAccept(success -> {
+			if(!success) {
+				// DO SOMETHING IN CASE OF FAIL
+			}
+		});
 	}
 
 }

@@ -1,12 +1,15 @@
 package com.eventpro.AttendeeService.service.impl;
 
+import java.time.Duration;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 import java.util.function.Function;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import com.eventpr.SalesService.dto.SaleDTO;
@@ -86,10 +89,18 @@ public class AttendeeServiceImpl implements AttendeeService {
 	}
 
 	@Override
-	public void checkin(CheckInDTO checkin) {
+	@Async
+	public CompletableFuture<Boolean> checkin(CheckInDTO checkin) {
 		log.info("checkin({})", checkin);
 		
-		this.kafkaProducer.participatCheckIn(checkin);
+	    try {
+	    	Thread.sleep(Duration.ofSeconds(10));
+	        this.kafkaProducer.participatCheckIn(checkin);
+	        return CompletableFuture.completedFuture(true);
+	    } catch (Exception e) {
+	        log.error("Error sending check-in to Kafka", e);
+	        return CompletableFuture.completedFuture(false);
+	    }
 	}
 
 }

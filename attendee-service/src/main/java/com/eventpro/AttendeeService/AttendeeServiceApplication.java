@@ -20,12 +20,14 @@ import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.kafka.core.ProducerFactory;
 import org.springframework.kafka.support.serializer.JsonDeserializer;
 import org.springframework.kafka.support.serializer.JsonSerializer;
+import org.springframework.scheduling.annotation.EnableAsync;
 
 import com.eventpr.SalesService.dto.SaleDTO;
 import com.eventpro.AttendeeService.dto.CheckInDTO;
 
 @SpringBootApplication
 @EnableJpaAuditing
+@EnableAsync
 public class AttendeeServiceApplication {
 
 	public static void main(String[] args) {

@@ -1,6 +1,7 @@
 package com.eventpro.AttendeeService.service;
 
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 
 import com.eventpr.SalesService.dto.SaleDTO;
 import com.eventpro.AttendeeService.dto.AttendeeDTO;
@@ -16,5 +17,5 @@ public interface AttendeeService {
 
 	public void notify(final SaleDTO saleDto);
 
-	public void checkin(CheckInDTO checkin);
+	public CompletableFuture<Boolean> checkin(CheckInDTO checkin);
 }
