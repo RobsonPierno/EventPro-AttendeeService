@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import com.eventpr.SalesService.dto.SaleDTO;
 import com.eventpro.AttendeeService.dto.AttendeeDTO;
+import com.eventpro.AttendeeService.dto.CheckInDTO;
 import com.eventpro.AttendeeService.model.Attendee;
 import com.eventpro.AttendeeService.producer.KafkaProducer;
 import com.eventpro.AttendeeService.repository.AttendeeRepository;
@@ -82,6 +83,13 @@ public class AttendeeServiceImpl implements AttendeeService {
 		log.info("Notification sent to {}, email {}!", att.getName(), att.getEmail());
 		
 		this.kafkaProducer.ticketSaleDone(saleDto);
+	}
+
+	@Override
+	public void checkin(CheckInDTO checkin) {
+		log.info("checkin({})", checkin);
+		
+		this.kafkaProducer.participatCheckIn(checkin);
 	}
 
 }

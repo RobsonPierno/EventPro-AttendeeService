@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 import com.eventpro.AttendeeService.dto.AttendeeDTO;
+import com.eventpro.AttendeeService.dto.CheckInDTO;
 
 @FeignClient(name = "attendee-service", url = "http://attendee:8082", path = "/attendee")
 public interface AttendeeClient {
@@ -25,4 +26,8 @@ public interface AttendeeClient {
 	
 	@GetMapping
 	public List<AttendeeDTO> findAll(@RequestParam(required = false) final Boolean overEighteen);
+	
+	@PostMapping("/checkin")
+	@ResponseStatus(value = HttpStatus.CREATED)
+	public void checkin(@RequestBody final CheckInDTO checkin);
 }

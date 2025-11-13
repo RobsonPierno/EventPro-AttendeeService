@@ -22,6 +22,7 @@ import org.springframework.kafka.support.serializer.JsonDeserializer;
 import org.springframework.kafka.support.serializer.JsonSerializer;
 
 import com.eventpr.SalesService.dto.SaleDTO;
+import com.eventpro.AttendeeService.dto.CheckInDTO;
 
 @SpringBootApplication
 @EnableJpaAuditing
@@ -67,15 +68,31 @@ public class AttendeeServiceApplication {
 	
 	@Bean
 	public ProducerFactory<String, SaleDTO> paymentResultPF() {
+		Map<String, Object> configProps = this.getConfigProps();
+		return new DefaultKafkaProducerFactory<>(configProps);
+	}
+	
+	@Bean
+	public ProducerFactory<String, CheckInDTO> participantCheckinPF() {
+		Map<String, Object> configProps = this.getConfigProps();
+		return new DefaultKafkaProducerFactory<>(configProps);
+	}
+
+	private Map<String, Object> getConfigProps() {
 		Map<String, Object> configProps = new HashMap<>();
 		configProps.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, this.springKafkaBootstrapServers);
 		configProps.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
 		configProps.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, JsonSerializer.class);
-		return new DefaultKafkaProducerFactory<>(configProps);
+		return configProps;
 	}
 
-	@Bean
+	@Bean("kafkaTemplateSales")
 	public KafkaTemplate<String, SaleDTO> paymentResultKT() {
 		return new KafkaTemplate<String, SaleDTO>(this.paymentResultPF());
+	}
+	
+	@Bean("kafkaTemplateCheckin")
+	public KafkaTemplate<String, CheckInDTO> participantCheckinKT() {
+		return new KafkaTemplate<String, CheckInDTO>(this.participantCheckinPF());
 	}
 }

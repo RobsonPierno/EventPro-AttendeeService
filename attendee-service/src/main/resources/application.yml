@@ -45,3 +45,5 @@ kafka:
     ticket:
       sale:
         done: ticket.sale.done
+    participant:
+      checkin: participant.checked.in

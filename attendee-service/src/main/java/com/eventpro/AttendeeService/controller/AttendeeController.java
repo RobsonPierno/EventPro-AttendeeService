@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.eventpro.AttendeeService.client.AttendeeClient;
 import com.eventpro.AttendeeService.dto.AttendeeDTO;
+import com.eventpro.AttendeeService.dto.CheckInDTO;
 import com.eventpro.AttendeeService.service.AttendeeService;
 
 @RestController
@@ -32,6 +33,11 @@ public class AttendeeController implements AttendeeClient {
 	public List<AttendeeDTO> findAll(Boolean overEighteen) {
 		List<AttendeeDTO> dtos = this.service.findAll(overEighteen);
 		return dtos;
+	}
+
+	@Override
+	public void checkin(CheckInDTO checkin) {
+		this.service.checkin(checkin);
 	}
 
 }
