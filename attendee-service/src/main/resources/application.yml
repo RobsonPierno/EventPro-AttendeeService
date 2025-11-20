@@ -38,6 +38,26 @@ spring:
           type:
             trace: true
 
+  security:
+    oauth2:
+      client:
+        registration:
+          attendee-client:
+            authorization-grant-type: client_credentials
+            client-id: attendee-client
+            client-secret: rQuAVr5dBhzDCyKoDS2ngIsvFe1CymHP
+            provider: attendee-provider
+            scope: openid
+            token-uri: http://keycloak:8080/realms/master/protocol/openid-connect/token
+        provider:
+          attendee-provider:
+            authorization-uri: https://keycloak:8080/auth/realms/master/protocol/openid-connect/auth
+            token-uri: https://keycloak:8080/auth/realms/master/protocol/openid-connect/token
+            user-info-uri: https://keycloak:8080/auth/realms/master/protocol/openid-connect/userinfo
+      resourceserver:
+        jwt:
+          jwk-set-uri: http://keycloak:8080/realms/master/protocol/openid-connect/certs
+
 kafka:
   topic:
     payment: 
